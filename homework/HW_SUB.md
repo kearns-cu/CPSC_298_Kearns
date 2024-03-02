@@ -1,4 +1,5 @@
 ## Input
+```
 <|im_start|>system
 You are a helpful assistant<|im_end|>
 <|im_start|>user
@@ -14,6 +15,7 @@ public:
     }
 };<|im_end|>
 <|im_start|>assistant
+```
 
 ## Output
 <img width="643" alt="Screenshot 2024-03-02 at 1 18 19 PM" src="https://github.com/kearns-cu/CPSC_298_Kearns/assets/90280289/a04b0971-4785-499e-8348-727f1caec807">
