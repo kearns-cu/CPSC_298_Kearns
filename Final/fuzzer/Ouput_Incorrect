@@ -1,0 +1,69 @@
+class Term:
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+class Variable(Term):
+    def __init__(self, name):
+        super().__init__(f"V{name}")
+
+class Lambda(Term):
+    def __init__(self, var, body):
+        super().__init__(f"λ{var}. {body}")
+        self.var = var
+        self.body = body
+
+class Application(Term):
+    def __init__(self, func, arg):
+        super().__init__(f"{func} {arg}")
+        self.func = func
+        self.arg = arg
+
+class Constant(Term):
+    def __init__(self, value):
+        super().__init__(value)
+
+def substitute(term, var, value):
+    if isinstance(term, Variable):
+        return Variable(term.value.replace("V", str(value)))
+    elif isinstance(term, Lambda):
+        return Lambda(term.var, substitute(term.body, var, value))
+    elif isinstance(term, Application):
+        return Application(substitute(term.func, var, value), substitute(term.arg, var, value))
+    elif isinstance(term, Constant):
+        return term
+    else:
+        raise ValueError("Unsupported term type")
+
+def beta_reduce(term):
+    if isinstance(term, Application):
+        if isinstance(term.func, Lambda):
+            return substitute(term.func.body, term.func.var, term.arg)
+        else:
+            return term
+    else:
+        return term
+
+def eta_expand(term):
+    if isinstance(term, Lambda):
+        return term
+    else:
+        return term
+
+def normalize(term):
+    while True:
+        new_term = beta_reduce(term)
+        if new_term == term:
+            return term
+        term = new_term
+
+# Example usage:
+x = Variable("x")
+y = Variable("y")
+lambda_x = Lambda("x", x)
+lambda_y = Lambda("y", y)
+app = Application(lambda_x, lambda_y)
+
+print(normalize(app))  # Output: λy. y
